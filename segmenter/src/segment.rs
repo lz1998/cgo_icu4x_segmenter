@@ -25,7 +25,10 @@ lazy_static! {
 
 #[cfg(feature = "word")]
 pub fn get_word_breakpoints(input: &str) -> Vec<usize> {
-    icu::segmenter::WordSegmenter::try_new_unstable(&icu_testdata::unstable()).expect("Data exists").segment_str(input).collect()
+    icu::segmenter::WordSegmenter::try_new_unstable(&icu_testdata::unstable())
+        .expect("Data exists")
+        .segment_str(input)
+        .collect()
 }
 
 #[cfg(feature = "sentence")]
@@ -37,7 +40,11 @@ pub fn get_sentence_breakpoints(input: &str) -> Vec<usize> {
         .find_overlapping_iter(input)
         .map(|m| (m.end()))
         .collect();
-    let icu_points: Vec<_> = icu::segmenter::SentenceSegmenter::try_new_unstable(&icu_testdata::unstable()).expect("Data exists").segment_str(input).collect();
+    let icu_points: Vec<_> =
+        icu::segmenter::SentenceSegmenter::try_new_unstable(&icu_testdata::unstable())
+            .expect("Data exists")
+            .segment_str(input)
+            .collect();
     let mut breakpoints = alloc::vec![0];
     let mut breakpoint;
 
@@ -60,19 +67,23 @@ pub fn get_sentence_breakpoints(input: &str) -> Vec<usize> {
     breakpoints
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     fn test_segment<F>(breaker: F, input: &str)
-        where
-            F: FnOnce(&str) -> Vec<usize>,
+    where
+        F: FnOnce(&str) -> Vec<usize>,
     {
         let segments = breaker(input);
         println!("===========");
         for range in segments.windows(2) {
-            println!("start: {}, end: {}, text: {:?}", range[0], range[1], &input[range[0]..range[1]])
+            println!(
+                "start: {}, end: {}, text: {:?}",
+                range[0],
+                range[1],
+                &input[range[0]..range[1]]
+            )
         }
     }
 

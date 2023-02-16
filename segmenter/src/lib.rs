@@ -31,9 +31,7 @@ fn breakpoints_utf8_to_char(text: &str, breakpoints: Vec<usize>) -> Vec<usize> {
 #[cfg(feature = "sentence")]
 #[no_mangle]
 pub extern "C" fn break_sentence(a: *mut c_char) -> *mut CharBreakPoints {
-    let s = unsafe {
-        CString::from_raw(a)
-    };
+    let s = unsafe { CString::from_raw(a) };
     let breakpoints = segment::get_sentence_breakpoints(s.to_str().unwrap());
     let s = CharBreakPoints(breakpoints_utf8_to_char(s.to_str().unwrap(), breakpoints).into_iter());
     Box::into_raw(Box::new(s))
@@ -42,9 +40,7 @@ pub extern "C" fn break_sentence(a: *mut c_char) -> *mut CharBreakPoints {
 #[cfg(feature = "word")]
 #[no_mangle]
 pub extern "C" fn break_word(a: *mut c_char) -> *mut CharBreakPoints {
-    let s = unsafe {
-        CString::from_raw(a)
-    };
+    let s = unsafe { CString::from_raw(a) };
     let breakpoints = segment::get_word_breakpoints(s.to_str().unwrap());
     let s = CharBreakPoints(breakpoints_utf8_to_char(s.to_str().unwrap(), breakpoints).into_iter());
     Box::into_raw(Box::new(s))
